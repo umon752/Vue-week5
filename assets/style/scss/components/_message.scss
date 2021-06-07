@@ -1,0 +1,16 @@
+.message {
+    position: fixed;
+    bottom: 45%;
+    left: 50%;
+    z-index: 12;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: all linear .3s;
+    border-radius: 8px;
+
+    &.active {
+        bottom: 50%;
+        opacity: 1;
+        transition: all linear .3s;
+    }
+}

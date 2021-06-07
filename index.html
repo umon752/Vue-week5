@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brand.</title>
+    <!-- material icon（CDN） -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- AOS（CDN） -->
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <link rel="stylesheet" href="./assets/style/css/all.css">
+</head>
+
+<body>
+
+    <div id="app">
+        <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top">
+            <div class="container">
+                <h1 class="d-flex align-items-center">
+                    <a class="h3 fw-bold text-primary-light" href="./index.html">BRAND.</a>
+                </h1>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+                    aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+        </nav>
+
+        <!-- 商品列表 -->
+        <section class="bg-light py-5" data-aos="fade-up">
+            <div class="container">
+                <h2 class="h4 text-dark text-center text-primary-dark mb-4">商品列表</h2>
+                <!-- product card -->
+                <product-list :products-data="productsData" @view-product="openModal" @add-cart="addCart" :thousands="thousands">
+                </product-list>
+                <!-- <ul class="row">
+                <li class="col-6 col-md-4 col-lg-3 mb-4">
+                    <div class="productTag bg-dark text-white py-2 px-4">新品</div>
+                    <img src="./assets/images/img01.png" class="productImg">
+                    <a href="#" class="btn btn-dark rounded-0 w-100 mb-2">加入購物車</a>
+                    <h4 class="font-size-sm h6-md mb-md-2">Antony 雙人床架／雙人加大</h4>
+                    <del class="font-size-sm h6-md">NT$18,000</del>
+                    <h5 class="h6 h5-md">NT$12,000</h5>
+                </li>
+            </ul> -->
+                <pagination :page="pagination" @get-product="getProductsData"></pagination>
+            </div>
+        </section>
+
+        <!-- 我的購物車 -->
+        <section class="container py-5" data-aos="fade-up">
+            <h2 class="h4 text-dark text-center text-primary-dark mb-4">購物車</h2>
+            <div class="row justify-content-center">
+                <div class="col-10 col-lg-9">
+                    <div class="">
+                        <cart-list :carts-data="cartsData" @del-cart="delCartData" @update-cart="updateCart" :thousands="thousands">
+                        </cart-list>
+                        <!-- <div class="row d-none d-md-flex mb-3">
+                    <div class="col-md-4 col-lg-3">品項</div>
+                    <div class="col-md-2 col-lg-3">單價</div>
+                    <div class="col-md-2 col-lg-3">數量</div>
+                    <div class="col-md-4 col-lg-3">金額</div>
+                </div>
+
+                        <ul class="row align-items-center border-bottom pb-3 mb-3">
+                    <li class="col-md-4 col-lg-3 d-flex flex-column flex-md-row align-items-md-center">
+                        <img src="./assets/images/img02.png" class="cartImg mb-2 mr-md-3">
+                        <h4 class="h6"><span class="d-md-none">品名：</span>Antony 雙人床架／雙人加大</h4>
+                    </li>
+                    <li class="col-md-2 col-lg-3">
+                        <h5 class="h6"><span class="d-md-none">單價：</span>NT$12,000</h5>
+                    </li>
+                    <li class="col-md-2 col-lg-3">
+                        <div><span class="d-md-none">數量：</span>1</div>
+                    </li>
+                    <li class="col-md-4 col-lg-3 d-flex align-items-center justify-content-between">
+                        <h5 class="h6"><span class="d-md-none">金額：</span>NT$12,000</h5>
+                        <a href="#" class="material-icons text-dark">
+                            close
+                        </a>
+                    </li>
+                </ul> -->
+                    </div>
+                    <div class="d-flex align-items-center justify-content-between">
+                        <a href="#" class="btn btn-outline-primary text-nowrap rounded-0"
+                            @click.prevent="delAllCartsData">刪除所有品項</a>
+                        <div
+                            class="col-md-4 col-lg-3 d-flex flex-column flex-md-row align-items-end align-items-md-center justify-content-md-between text-primary-dark fw-bold pr-0">
+                            總金額<span class="h6 h5-lg fw-bold">NT$ {{ thousands(`${cartsData.final_total}`) }}</span></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 填寫預訂資料 -->
+        <section class="bg-light py-5">
+            <div class="container" data-aos="fade-up">
+                <h2 class="h4 text-dark text-center text-primary-dark mb-4">填寫訂單資料</h2>
+                <div class="row justify-content-center">
+                    <v-form v-slot="{ errors }" @submit="sendOrder" class="col-10 col-md-6">
+                        <div class="form-group mb-3">
+                            <label for="email" class="mb-1">Email</label>
+                            <v-field id="email" name="email" type="email" class="form-control mb-1"
+                                :class="{ 'is-invalid': errors['email'] }" placeholder="請輸入 Email"
+                                rules="email|required" v-model.trim="orderData.user.email"></v-field>
+                            <error-message name="email" class="invalid-feedback"></error-message>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="name" class="mb-1">收件人姓名</label>
+                            <v-field id="name" name="姓名" type="text" class="form-control mb-1"
+                                :class="{ 'is-invalid': errors['姓名'] }" placeholder="請輸入姓名"
+                                rules="required" v-model.trim="orderData.user.name"></v-field>
+                            <error-message name="姓名" class="invalid-feedback"></error-message>
+                            <div class="font-size-sm text-primary"></div>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="tel" class="mb-1">收件人電話</label>
+                            <v-field id="tel" name="電話" type="tel" class="form-control mb-1"
+                                :class="{ 'is-invalid': errors['電話'] }" placeholder="請輸入電話"
+                                rules="min:8|required" v-model.trim="orderData.user.tel"></v-field>
+                            <error-message name="電話" class="invalid-feedback"></error-message>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="address" class="mb-1">收件人地址</label>
+                            <v-field id="address" name="寄送地址" type="text" class="form-control mb-1"
+                                :class="{ 'is-invalid': errors['寄送地址'] }" placeholder="請輸入寄送地址"
+                                rules="required" v-model.trim="orderData.user.address"></v-field>
+                            <error-message name="寄送地址" class="invalid-feedback"></error-message>
+                        </div>
+                        <div class="form-group mb-5">
+                            <label for="message">留言</label>
+                            <textarea class="form-control" placeholder="請輸入留言" id="message" style="height: 100px"
+                                v-model.trim="orderData.message"></textarea>
+                        </div>
+                        <div class="d-flex">
+                            <button class="btn btn-primary-dark text-white rounded-0 px-5 mx-auto"
+                                type="submit" :class="{disabled : cartsLength}">送出訂單</button>
+                        </div>
+                    </v-form>
+                </div>
+            </div>
+        </section>
+
+        <footer class="py-3">
+            <div class="container text-center">
+                <p class="font-size-sm mb-1 mb-md-0">© 2021 BRAND.All Rights Reserved.</p>
+            </div>
+        </footer>
+
+        <div class="loading" v-if="loadingStatus">
+            <div class="spinner-border text-primary-light" style="width: 3rem; height: 3rem;" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+        <!-- modal -->
+        <product-modal ref="modal" :product="productData" @add-cart="addCart"></product-modal>
+
+
+        <!-- 訊息區塊 -->
+        <res-message :res-text="resObj.resMessage" :res-is-show="resObj.isShowReaMessage"></res-message>
+
+        <!-- goTop -->
+        <a href="#top"
+            class="goTop material-icons border border-primary rounded-circle h5 h3-md d-flex align-items-center justify-content-center p-2">
+            arrow_upward
+        </a>
+    </div>
+
+    <!-- AOS（CDN） -->
+    <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+    <!-- axios（CDN） -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- bootstrap（Source） -->
+    <script src="./assets/js/vendors/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/vue@next"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vee-validate/4.1.17/vee-validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@vee-validate/i18n@4.1.17/dist/vee-validate-i18n.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@vee-validate/rules@4.1.17/dist/vee-validate-rules.min.js"></script>
+    <script type="module" src="./assets/js/all.js"></script>
+</body>
+
+</html>
