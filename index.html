@@ -85,7 +85,7 @@
                     </div>
                     <div class="d-flex align-items-center justify-content-between">
                         <a href="#" class="btn btn-outline-primary text-nowrap rounded-0"
-                            @click.prevent="delAllCartsData" :class="{'disabled' : cartsLength}">刪除所有品項</a>
+                            @click.prevent="delAllCartsData" :class="{'disabled' : cartsData.carts.length === 0}">刪除所有品項</a>
                         <div
                             class="col-md-4 col-lg-3 d-flex flex-column flex-md-row align-items-end align-items-md-center justify-content-md-between text-primary-dark fw-bold pr-0">
                             總金額<span class="h6 h5-lg fw-bold">NT$ {{ thousands(`${cartsData.final_total}`) }}</span></div>
@@ -136,7 +136,7 @@
                         </div>
                         <div class="d-flex">
                             <button class="btn btn-primary-dark text-white rounded-0 px-5 mx-auto"
-                                type="submit" :class="{'disabled' : cartsLength}">送出訂單</button>
+                                type="submit" :class="{'disabled' : cartsData.carts.length === 0}">送出訂單</button>
                         </div>
                     </v-form>
                 </div>

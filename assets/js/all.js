@@ -16,8 +16,9 @@ const app = Vue.createApp({
             productsData: [],
             pagination: {},
             productData: {},
-            cartsData: {},
-            cartsLength: false,
+            cartsData: {
+                carts: []
+            },
             resObj: {
                 resMessage: '',
                 isShowReaMessage: false
@@ -97,11 +98,6 @@ const app = Vue.createApp({
                     if (res.data.success) {
                         // console.log(res.data);
                         this.cartsData = res.data.data;
-                        if (this.cartsData.carts.length === 0) {
-                            this.cartsLength = true;
-                        } else {
-                            this.cartsLength = false;
-                        }
                     }
                 }).catch((error) => {
                     console.log(error);
