@@ -99,7 +99,7 @@
             <div class="container" data-aos="fade-up">
                 <h2 class="h4 text-dark text-center text-primary-dark mb-4">填寫訂單資料</h2>
                 <div class="row justify-content-center">
-                    <v-form v-slot="{ errors }" @submit="sendOrder" class="col-10 col-md-6">
+                    <v-form v-slot="{ errors }" ref="form" @submit="sendOrder" class="col-10 col-md-6">
                         <div class="form-group mb-3">
                             <label for="email" class="mb-1">Email</label>
                             <v-field id="email" name="email" type="email" class="form-control mb-1"
@@ -119,7 +119,7 @@
                             <label for="tel" class="mb-1">收件人電話</label>
                             <v-field id="tel" name="電話" type="tel" class="form-control mb-1"
                                 :class="{ 'is-invalid': errors['電話'] }" placeholder="請輸入電話"
-                                rules="min:8|required" v-model.trim="orderData.user.tel"></v-field>
+                                rules="min:8|required|numeric" v-model.trim="orderData.user.tel"></v-field>
                             <error-message name="電話" class="invalid-feedback"></error-message>
                         </div>
                         <div class="form-group mb-3">
@@ -155,7 +155,7 @@
             </div>
         </div>
         <!-- modal -->
-        <product-modal ref="modal" :product="productData" @add-cart="addCart"></product-modal>
+        <product-modal ref="modal" :product="productData" @add-cart="addCart" :thousands="thousands"></product-modal>
 
 
         <!-- 訊息區塊 -->

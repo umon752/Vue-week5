@@ -188,6 +188,8 @@ const app = Vue.createApp({
                         this.getCartsData();
                         // 顯示訊息
                         this.resMessage(res.data.message);
+                        // 清除表單欄位
+                        this.$refs.form.resetForm();
                     } else {
                         // 顯示訊息
                         this.resMessage(res.data.message);
@@ -219,9 +221,16 @@ const app = Vue.createApp({
             this.$refs.modal.closeModal();
         },
         thousands(num) {
-            let parts = num.toString().split('.');
-            parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-            return parts.join('.');
+            // 畫面一開始載入時還不會有產品資料，所以 num 會等於 undefined，先讓函式中斷
+            if (num === undefined) {
+                return;
+            } 
+            // 當資料傳進來時，在執行加上千分號
+            else {
+                let parts = num.toString().split('.');
+                parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+                return parts.join('.');
+            }
         }
     },
     mounted() {

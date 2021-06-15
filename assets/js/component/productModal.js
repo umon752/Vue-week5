@@ -7,7 +7,7 @@ export default {
             qty: 1
         }
     },
-    props: ['product'],
+    props: ['product', 'thousands'],
     template: `<div class="modal fade" ref="modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content rounded-0">
@@ -23,8 +23,8 @@ export default {
                     <div class="col-lg-6">
                         <div>
                             <h3 class="h5 mb-2">{{ product.title }}</h3>
-                            <del class="font-size-sm h6-md">原價：NT$ {{ product.origin_price }}</del>
-                            <h5 class="font-size-sm h6-md text-primary-dark">售價：NT$ {{ product.price }}</h5>
+                            <del class="font-size-sm h6-md">原價：NT$ {{ thousands(product.origin_price) }}</del>
+                            <h5 class="font-size-sm h6-md text-primary-dark">售價：NT$ {{ thousands(product.price) }}</h5>
                             <p>描述：{{ product.description }}</p>
                             <p class="mb-3">內容：{{ product.content }}</p>
                             <div class="input-group mb-3">
@@ -50,7 +50,8 @@ export default {
             }
         },
         product() {
-            this.tempProduct = this.product;        
+            this.tempProduct = this.product;  
+            console.log('tem', this.tempProduct.price);
         }
     },
     methods: {
